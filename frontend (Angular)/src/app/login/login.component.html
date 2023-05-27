@@ -1,0 +1,64 @@
+<div class="container-fluid login-page">
+	<img src="./assets/images/logo (1).png" class="img-responsive img-assidq rounded mx-auto d-block">
+	<div class="container-fluid">
+		<div class="row justify-content-center custom-margin">
+			<div class="col-md-3" style="margin-top: 20px">
+				<!-- Add bg-primary in form tag if want form background color-->
+				<!--text-white if want text color white-->
+				<form [formGroup]="loginForm" (ngSubmit)="sendLogin()" class="shadow-lg p-4 text-white">
+
+          <div class="form-group">
+
+						<div class="input-group">
+							<div class="input-group addon">
+								<span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+								<input
+								type="text"
+								class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+								id="inputFirstName"
+								name="username"
+								formControlName="username"
+								required
+								>
+							</div>
+							<div *ngIf="username.touched">
+								<p *ngIf="username.errors?.required" style="color: red;">Username required</p>
+							</div>
+						</div>
+					</div>
+					<!--Add text-white below if want text color white-->
+
+					<div class="form-group">
+						<div class="input-group">
+							<div class="input-group addon">
+								<span class="input-group-addon" id="basic-addon1"><i class="fa fa-key"></i></span>
+								<input
+								type="password"
+								class="form-control"
+								id="inputPassword"
+								formControlName="password"
+								required
+								>
+							</div>
+							<div *ngIf="password.touched">
+								<p *ngIf="password.errors?.required" style="color: red;">Password required</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12">
+							<span spinner-on="showSpinner" us-spinner></span>
+								
+							<button type="submit" class="btn-lg btn-outline-success mt-3 btn-block shadow-sm font-weight-bold" style="background-color: #2bb673 ; color: #fff">Submit</button>
+						</div>
+					</div>
+					<hr>
+					<div class="form-group text-center">
+						<br><p><a href="#/forgot">Forgot Password?</a></p>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

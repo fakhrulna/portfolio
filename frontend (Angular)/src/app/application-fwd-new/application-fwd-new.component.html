@@ -1,0 +1,559 @@
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Total {{ statusName }} Application
+        <span class="pull-right-container">
+          <span class="label-breadcrumb">{{ app_count }}</span>
+        </span>
+      </li>
+    </ol>
+  </nav>
+</div>
+
+<ng-template #notLoaded>
+  <div class="alert alert-success" *ngIf="startDate && endDate">
+    List Of {{ statusName | uppercase }} Application From
+    <span class="badge badge-success">{{ startDate }}</span> To
+    <span class="badge badge-success">{{ endDate }} </span> || Total :
+    <span class="badge badge-primary">{{ total }} Applicants</span>
+  </div>
+  <table
+    class="table table-bordered header-application"
+    id="dataTable"
+    width="100%"
+    cellspacing="0"
+    *ngIf="status == 'ghf_fwd_approved'"
+  >
+    <thead>
+      <tr class="bg-black font-white">
+        <th><input type="checkbox" /></th>
+        <th>App Date</th>
+        <th>App ID</th>
+        <th>Applicant Name</th>
+        <th>Policy Status</th>
+        <th>Amount</th>
+        <th>Payment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="alert alert-secondary" role="alert" colspan="7">
+          <p class="text-center">
+            No
+            {{ statusName | titlecase }} Application Data
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table
+    class="table table-bordered header-application"
+    id="dataTable"
+    width="100%"
+    cellspacing="0"
+    *ngIf="status == 'ghf_fwd_rejected'"
+  >
+    <thead>
+      <tr class="bg-black font-white">
+        <th><input type="checkbox" /></th>
+        <th>App Date</th>
+        <th>App ID</th>
+        <th>Applicant Name</th>
+        <th>Policy Status</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="alert alert-secondary" role="alert" colspan="6">
+          <p class="text-center">
+            No
+            {{ statusName | titlecase }} Application Data
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table
+    class="table table-bordered header-application"
+    id="dataTable"
+    width="100%"
+    cellspacing="0"
+    *ngIf="status == 'exceptional'"
+  >
+    <thead>
+      <tr class="bg-black font-white">
+        <th><input type="checkbox" /></th>
+        <th>Report Date</th>
+        <th>Apln Date</th>
+        <th>App ID</th>
+        <th>Applicant Name</th>
+        <th>NRIC</th>
+        <th>Validation</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="alert alert-secondary" role="alert" colspan="8">
+          <p class="text-center">
+            No
+            {{ statusName | titlecase }} Application Data
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>
+
+<div class="row">
+  <div class="col-lg-12 mb-4">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <div ngbDropdown class="btn-group mg-bt-20 w-100">
+          <span class="app-dropdown">APPLICATION STATUS Q :</span>
+          <button
+            type="button"
+            class="btn text-left btn-success dropdown-toggle"
+            id="dropdownBasic1"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ngbDropdownToggle
+          >
+            {{ statusName }}
+          </button>
+
+          <div
+            ngbDropdownMenu
+            aria-labelledby="dropdownBasic1"
+            class="dropdown-menu w-100 clr-green-theme"
+          >
+            <div *ngFor="let item of buckets">
+              <a
+                class="dropdown-item dropdownBasic"
+                ngbDropdownItem
+                (click)="listApplied(item)"
+                >{{ item.name }}</a
+              >
+              <div class="dropdown-divider"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" style="padding: 2px 2px">
+          <form #statusForm="ngForm" class="form-inline">
+            <div class="col-6" *ngIf="status == 'ghf_fwd_rejected'"></div>
+            <div class="col-3" *ngIf="status == 'ghf_fwd_approved'">
+              <span style="padding: 5px"><h5>Payment Status :</h5></span>
+            </div>
+            <div class="col-3" *ngIf="status == 'exceptional'">
+              <span style="padding: 5px"><h5>Validation Status :</h5></span>
+            </div>
+            <div class="col-3" *ngIf="status == 'ghf_fwd_approved'">
+              <select
+                name="selectFilterStatus"
+                [(ngModel)]="selectFilterStatus"
+                class="form-control"
+                style="min-width: 150px; width: 100%"
+                (change)="onFilterSelected()"
+              >
+                <option *ngFor="let item of filterStatus" value="{{ item }}">
+                  {{ item }}
+                </option>
+              </select>
+            </div>
+            <div class="col-3" *ngIf="status == 'exceptional'">
+              <select
+                name="selectFilterStatus"
+                [(ngModel)]="selectFilterStatus"
+                class="form-control"
+                style="min-width: 150px; width: 100%"
+                (change)="onFilterSelected()"
+              >
+                <option *ngFor="let item of filterStatus" value="{{ item }}">
+                  {{ item }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-2"></div>
+            <div class="col-2">
+              <button
+                type="button"
+                (click)="pageRefresh()"
+                class="btn btn-primary"
+                style="width: 100%; min-height: 62px"
+              >
+                Refresh
+              </button>
+            </div>
+            <div class="col-2">
+              <a href="{{ urlExcel }}" target="_blank" (click)="onButtonExcel()"
+                ><button
+                  type="button"
+                  class="btn btn-primary"
+                  style="width: 100%; min-height: 62px"
+                >
+                  Export Excel
+                </button></a
+              >
+            </div>
+          </form>
+        </div>
+        <input
+          type="file"
+          #excelPicker
+          (change)="onExcelPicked($event.target.files)"
+        />
+
+        <div class="col-md-12" style="padding: 2px 12px">
+          <div class="row">
+            <div class="form-group hidden">
+              <div class="input-group">
+                <input
+                  name="datepicker"
+                  class="form-control"
+                  ngbDatepicker
+                  #datepicker="ngbDatepicker"
+                  [autoClose]="'outside'"
+                  (dateSelect)="onDateSelection($event)"
+                  [displayMonths]="2"
+                  [dayTemplate]="t"
+                  outsideDays="hidden"
+                  [startDate]="fromDate"
+                  style="top: 0px; left: 15px"
+                />
+                <ng-template #t let-date let-focused="focused">
+                  <span
+                    class="custom-day"
+                    [class.focused]="focused"
+                    [class.range]="isRange(date)"
+                    [class.faded]="isHovered(date) || isInside(date)"
+                    (mouseenter)="hoveredDate = date"
+                    (mouseleave)="hoveredDate = null"
+                  >
+                    {{ date.day }}
+                  </span>
+                </ng-template>
+              </div>
+            </div>
+            <div class="form-group col-4">
+              <div class="input-group">
+                <input
+                  #dpFromDate
+                  class="form-control"
+                  placeholder="yyyy-mm-dd"
+                  name="dpFromDate"
+                  [value]="formatter.format(fromDate)"
+                  (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-outline-secondary calendar"
+                    (click)="datepicker.toggle()"
+                    type="button"
+                  ></button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-4">
+              <div class="input-group">
+                <input
+                  #dpToDate
+                  class="form-control"
+                  placeholder="yyyy-mm-dd"
+                  name="dpToDate"
+                  [value]="formatter.format(toDate)"
+                  (input)="toDate = validateInput(toDate, dpToDate.value)"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-outline-secondary calendar"
+                    (click)="datepicker.toggle()"
+                    type="button"
+                  ></button>
+                </div>
+              </div>
+            </div>
+            <div class="btn-group col-4" style="padding-left: 3px">
+              <button class="btn btn-dark" (click)="onFilterDateRange()">
+                Filter
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #loading> LOADING ... </ng-template>
+        <div *ngIf="isLoaded == true; else loading">
+          <div *ngIf="dataLoaded == true; else notLoaded">
+            <div class="table table-responsive">
+              <div class="alert alert-danger" *ngIf="filterMessage">
+                {{ filterMessage }}
+              </div>
+              <div class="alert alert-success" *ngIf="startDate && endDate">
+                List Of {{ status | uppercase }} Application From
+                <span class="badge badge-success">{{ startDate }}</span> To
+                <span class="badge badge-success">{{ endDate }} </span> || Total
+                :
+                <span class="badge badge-primary">{{ total }} Applicants</span>
+              </div>
+              <table
+                class="table table-bordered header-application"
+                id="dataTable"
+                width="100%"
+                cellspacing="0"
+              >
+                <thead *ngIf="status == 'ghf_fwd_approved'">
+                  <tr class="bg-black font-white">
+                    <th>
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="selectedAll"
+                        (change)="selectAll()"
+                      />
+                    </th>
+                    <th>App Date</th>
+                    <th>App ID</th>
+                    <th>Applicant Name</th>
+                    <th>Policy Status</th>
+                    <th>Amount</th>
+                    <th>Payment</th>
+                  </tr>
+                </thead>
+                <thead *ngIf="status == 'ghf_fwd_rejected'">
+                  <tr class="bg-black font-white">
+                    <th>
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="selectedAll"
+                        (change)="selectAll()"
+                      />
+                    </th>
+                    <th>App Date</th>
+                    <th>App ID</th>
+                    <th>Applicant Name</th>
+                    <th>Policy Status</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <thead *ngIf="status == 'exceptional'">
+                  <tr class="bg-black font-white">
+                    <th>
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="selectedAll"
+                        (change)="selectAll()"
+                      />
+                    </th>
+                    <th>Report Date</th>
+                    <th>Apln Date</th>
+                    <th>App ID</th>
+                    <th>Applicant Name</th>
+                    <th>NRIC</th>
+                    <th>Validation</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody *ngIf="status == 'ghf_fwd_approved'">
+                  <tr *ngFor="let app of applicant">
+                    <td>
+                      <input
+                        type="checkbox"
+                        (click)="checkApp(app)"
+                        [(ngModel)]="app.selected"
+                        (change)="checkIfAllSelected()"
+                      />
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.apply_date }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.app_id }}
+                      </div>
+                    </td>
+                    <td>
+                      <img
+                        class="img-profile rounded-circle border-ccc applicant-image"
+                        src="assets/img/profile.png"
+                      />
+                      <b>{{ app.appname | uppercase }}</b>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.policy_status | uppercase }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.fwd_premium }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.sedania_payment_status | uppercase }}
+                      </div>
+                    </td>
+                    <!--
+                    <td>
+                      <button type="button" class="btn btn-details">
+                        <a
+                          [routerLink]="[
+                            '/fwd-detail',
+                            app.detail_id,
+                            app.app_status,
+                            app.app_id,
+                            app.app_code
+                          ]"
+                          >Details</a
+                        >
+
+                        <i class="fa fa-fw fa-angle-right"></i>
+                      </button>
+                    </td>
+                    -->
+                  </tr>
+                </tbody>
+                <tbody *ngIf="status == 'ghf_fwd_rejected'">
+                  <tr *ngFor="let app of applicant">
+                    <td>
+                      <input
+                        type="checkbox"
+                        (click)="checkApp(app)"
+                        [(ngModel)]="app.selected"
+                        (change)="checkIfAllSelected()"
+                      />
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.apply_date }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.app_id }}
+                      </div>
+                    </td>
+                    <td>
+                      <img
+                        class="img-profile rounded-circle border-ccc applicant-image"
+                        src="assets/img/profile.png"
+                      />
+                      <b>{{ app.appname | uppercase }}</b>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.policy_status | uppercase }}
+                      </div>
+                    </td>
+                    <!--
+                    <td>
+                      <button type="button" class="btn btn-details">
+                        <a
+                          [routerLink]="[
+                            '/fwd-detail',
+                            app.detail_id,
+                            app.app_status,
+                            app.app_id,
+                            app.app_code
+                          ]"
+                          >Details</a
+                        >
+
+                        <i class="fa fa-fw fa-angle-right"></i>
+                      </button>
+                    </td>
+                    -->
+                  </tr>
+                </tbody>
+                <tbody *ngIf="status == 'exceptional'">
+                  <tr *ngFor="let app of applicant">
+                    <td>
+                      <input
+                        type="checkbox"
+                        (click)="checkApp(app)"
+                        [(ngModel)]="app.selected"
+                        (change)="checkIfAllSelected()"
+                      />
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.exceptional_ts }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.apply_date }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.app_id }}
+                      </div>
+                    </td>
+                    <td>
+                      <img
+                        class="img-profile rounded-circle border-ccc applicant-image"
+                        src="assets/img/profile.png"
+                      />
+                      <b>{{ app.appname | uppercase }}</b>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.ic_no }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.exceptional_status | uppercase }}
+                      </div>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-details">
+                        <a [routerLink]="['/exceptional-detail', app.app_id]">
+                          <span *ngIf="app.exceptional_status == 'completed'"
+                            >View Change</span
+                          >
+                          <span *ngIf="app.exceptional_status !== 'completed'"
+                            >Edit</span
+                          >
+                        </a>
+
+                        <i class="fa fa-fw fa-angle-right"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- pagination -->
+              <ul class="pagination" *ngIf="paging">
+                <li *ngFor="let item of paginationList">
+                  <span
+                    *ngIf="item === current_page"
+                    style="background-color: #337ab7; color: #fff; border: 1 px"
+                    ><b>{{ item }}</b></span
+                  >
+                  <a *ngIf="item === '..'" style="border: 1 px"
+                    ><b>{{ item }}</b></a
+                  >
+                  <a
+                    (click)="getPage(item)"
+                    *ngIf="item !== current_page && item !== '..'"
+                    style="cursor: pointer"
+                    >{{ item }}</a
+                  >
+                </li>
+              </ul>
+              <!-- end pagination -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

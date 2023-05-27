@@ -1,0 +1,14 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 100%;
+}
+
+.content {
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}

@@ -1,0 +1,65 @@
+<div class="d-sm-flex align-items-center justify-content-between ">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Analytics</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 portlets">
+        <div id="website-statistics1" class="widget">
+            <div class="widget-header transparent">
+                <h2><i class="icon-chart-line"></i> <strong>Analytics</strong></h2>
+            </div>
+            <div class="widget-content">
+                <div id="website-statistic" class="statistic-chart">    
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="widget-content padding">
+                                <!-- Filter /-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            
+                            <div class="widget-content padding">
+                                <h2>Overview of Applicants</h2>
+                                <div *ngIf="done == true; else loading">
+                                    <div class="flex">
+                                    <div class="flex-item">
+                                        <div style="display: block">
+                                            <div class="chart-container" style="position: relative; height:60vh; width:60vw">
+                                                <canvas baseChart 
+                                                    [datasets]="lineChartData"
+                                                    [labels]="lineChartLabels"
+                                                    [options]="lineChartOptions"
+                                                    [colors]="lineChartColors"
+                                                    
+                                                    [chartType]="lineChartType"
+                                                    [plugins]="lineChartPlugins"
+                                                    >
+                                                </canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <ng-template #loading>
+                                        <div class="row" style="width: 100%; margin: 0 auto; height: 100px">
+                                            <img style="display: block; margin-left: auto; margin-right: auto;" width="100px;" src="./assets/images/spin3.gif" />
+                                        </div>
+                                        <button mat-button mat-raised-button color="primary" (click)="loadData()">Load</button>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

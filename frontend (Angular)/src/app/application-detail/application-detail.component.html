@@ -1,0 +1,1079 @@
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/application']">Application Applied</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Application Detail
+      </li>
+    </ol>
+  </nav>
+</div>
+<!-- Non Gohalal -->
+<div
+  class="d-sm-flex align-items-center justify-content-between mb-4"
+  *ngIf="!isGoHalal || (isGoHalal && assidq == true)"
+>
+  <h1 class="h3 mb-0 text-gray-800">Applicant Details</h1>
+</div>
+<!-- End Non Gohalal -->
+
+<!-- Go Halal -->
+<div class="mb-4" *ngIf="isGoHalal && isLoaded && assidq == false">
+  <div class="row">
+    <div class="col-5">
+      <h2 class="mb-0 text-gray-800">
+        {{ dataApp.app_id }} / {{ dataApp.reference_id }}
+      </h2>
+    </div>
+    <div class="col-5">
+      <!-- tawarruq_no -->
+      <form #statusForm="ngForm" class="form-inline" *ngIf="isGoHalal == true && applicationStatus == 'ghf_tawarruq_no' && dataApp.confirm_cancel != 1">
+        <div class="col-6">
+          <button
+            style="width: 100%"
+            type="button"
+            class="btn btn-primary"
+            (click)="confirmCancel()"
+            style="width: 100%; min-height: 62px"
+          >
+            Confirm Cancel
+          </button>
+        </div>
+        <div class="col-6">
+          <button
+            type="button"
+            (click)="confirmCash()"
+            class="btn btn-primary"
+            style="width: 100%; min-height: 62px"
+          >
+            Confirm Customer<br/>To Get Cash
+          </button>
+        </div>
+      </form>
+
+      <!-- tawarruq_keep -->
+      <form #statusForm="ngForm" class="form-inline" *ngIf="isGoHalal == true && applicationStatus == 'ghf_tawarruq_keep'">
+        <div class="col-5">
+          <button
+            style="width: 100%"
+            type="button"
+            class="btn btn-primary"
+            (click)="confirmCancel()"
+            style="width: 100%; min-height: 62px"
+          >
+            Customer To Cancel
+          </button>
+        </div>
+        <div class="col-6">
+          <button
+            type="button"
+            (click)="confirmCash()"
+            class="btn btn-primary"
+            style="width: 100%; min-height: 62px"
+          >
+            Customer To Get Cash
+
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col-2" style="text-align: right">
+      <h2 class="mb-0 text-gray-800">
+        {{ dataApp.src_channel == "ghf" ? "Go Halal" : "Assidq.com" }}
+      </h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h4 class="mb-0 text-gray-800">
+        STATUS : {{ statusApp(dataApp.app_status) | uppercase }}
+      </h4>
+    </div>
+  </div>
+</div>
+<!-- End Go Halal -->
+
+<ng-template #Loading> Loading </ng-template>
+
+<div *ngIf="isLoaded; else Loading">
+  <div class="row" *ngIf="isGoHalal && assidq == false">
+    <div class="col-lg-12 mb-4">
+      <h3>Declared Applicant Details</h3>
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-3">Product</div>
+            <div class="col-3">{{ dataApp.product }}</div>
+            <div class="col-3">Phone No</div>
+            <div class="col-3">{{ dataApp.phoneno }}</div>
+          </div>
+          <div class="row">
+            <div class="col-3">Application Date</div>
+            <div class="col-3">{{ dataApp.apply_date }}</div>
+            <div class="col-3">Email</div>
+            <div class="col-3">{{ dataApp.email }}</div>
+          </div>
+          <div class="row">
+            <div class="col-3">Loan Amount</div>
+            <div class="col-3">{{ dataApp.amount }}</div>
+            <div class="col-3">State</div>
+            <div class="col-3">{{ dataApp.states }}</div>
+          </div>
+          <div class="row">
+            <div class="col-3">Loan Tenure</div>
+            <div class="col-3">{{ dataApp.tenure }} months</div>
+            <div class="col-3">Income</div>
+            <div class="col-3">{{ dataApp.gross_salary }}</div>
+          </div>
+          <div class="row">
+            <div class="col-3">Loan Purpose</div>
+            <div class="col-3">-</div>
+            <div class="col-3">Sector</div>
+            <div class="col-3">-</div>
+          </div>
+          <div class="row">
+            <div class="col-3">Name</div>
+            <div class="col-3">{{ dataApp.name }}</div>
+            <div class="col-3">Employment</div>
+            <div class="col-3">-</div>
+          </div>
+          <div class="row">
+            <div class="col-3">IC No.</div>
+            <div class="col-3">{{ icNoShow(dataApp.ic_no) }}</div>
+            <div class="col-3">Industry</div>
+            <div class="col-3">-</div>
+          </div>
+          <div class="row">
+            <div class="col-3">DOB</div>
+            <div class="col-3">{{ dataApp.dob }}</div>
+            <div class="col-3"></div>
+            <div class="col-3"></div>
+          </div>
+        </div>
+      </div>
+      <h3>Verified Applicant Details</h3>
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-3">Upload Date</div>
+            <div class="col-3">{{ dataApp.apply_date }}</div>
+            <div class="col-3">Monthly Income</div>
+            <div class="col-3">{{ dataApp.gross_salary }}</div>
+          </div>
+          <div class="row">
+            <div class="col-3">Name</div>
+            <div class="col-3">{{ dataApp.name }}</div>
+            <div class="col-3">Salary Date</div>
+            <div class="col-3">{{ dataApp.salary_date }}</div>
+          </div>
+          <div class="row">
+            <div class="col-3">IC No</div>
+            <div class="col-3">{{ dataApp.ic_no }}</div>
+            <div class="col-3">Installment</div>
+            <div class="col-3">{{ dataApp.installmentmax }}</div>
+          </div>
+          <div class="row">
+            <div class="col-3">Phone No</div>
+            <div class="col-3">{{ dataApp.phoneno }}</div>
+            <div class="col-3">Health Declaration</div>
+            <div class="col-3">
+              {{ dataApp.health_declaration == "1" ? "Y" : "N" }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">Email</div>
+            <div class="col-3">{{ dataApp.email }}</div>
+            <div class="col-3">AML Clearance</div>
+            <div class="col-3">
+              {{ dataApp.aml_clearance == "1" ? "Y" : "N" }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">Tenure</div>
+            <div class="col-3">{{ dataApp.tenure }} months</div>
+            <div class="col-3">PDPA</div>
+            <div class="col-3">
+              {{ dataApp.pdpa_declaration == "1" ? "Y" : "N" }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <h3>Loan Processing Details</h3>
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-3">LO SMS Reply</div>
+            <div class="col-3">
+              {{ dataApp.reply_message ? dataApp.reply_message : "-" }}
+            </div>
+            <div class="col-3">Tawarruq Status</div>
+            <div class="col-1">
+              {{ dataApp.tawarruq_status ? dataApp.tawarruq_status : "-" }} {{ applicationStatus == "ghf_tawarruq_no" && dataApp.confirm_cancel == 1 ? ' (Confirmed)' : '' }}
+            </div>
+            <div class="col-1" *ngIf="getTawarruqStatus == true" style="max-width: 5%;">Link :</div>
+            <div class="col-1" *ngIf="getTawarruqStatus == true" (click)="getTawarruq()">
+              <a href="javascript:;">Tawarruq Details</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">LO SMS Date</div>
+            <div class="col-3">
+              {{ dataApp.reply_timestamp ? dataApp.reply_timestamp : "-" }}
+            </div>
+            <div class="col-3">Tawarruq Date</div>
+            <div class="col-3">
+              {{ dataApp.tawarruq_ts ? dataApp.tawarruq_ts : "-" }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">eMandate1 Status</div>
+            <div class="col-3">
+              {{ dataApp.emandate1_status ? dataApp.emandate1_status : "-" }}
+            </div>
+            <div class="col-3">Disbursement Date</div>
+            <div class="col-3">
+              {{ dataApp.disbursement_date ? dataApp.disbursement_date : "-" }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">eMandate1 Date</div>
+            <div class="col-3">
+              {{ dataApp.emandate1_ts ? dataApp.emandate1_ts : "-" }}
+            </div>
+            <div class="col-3">First Deduction Date</div>
+            <div class="col-3">
+              {{ dataApp.first_deduction_date ? dataApp.first_deduction_date : "-" }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <h3>Takaful Policy Details</h3>
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-3">FWD Code</div>
+            <div class="col-3">{{ dataApp.fwd_code }}</div>
+            <div class="col-3">Payment Status</div>
+            <div class="col-3">
+              {{
+                dataApp.sedania_payment_status
+                  ? dataApp.sedania_payment_status
+                  : "Pending"
+              }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">Eligibility Status</div>
+            <div class="col-3">
+              {{
+                dataApp.takaful_eligibility == "1" ? "Eligible" : "Not Eligible"
+              }}
+            </div>
+            <div class="col-3">Paid Amount</div>
+            <div class="col-3">
+              {{
+                dataApp.sedania_paid_amount ? dataApp.sedania_paid_amount : "-"
+              }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">Sum Covered</div>
+            <div class="col-3">{{ dataApp.sum_covered }}</div>
+            <div class="col-3">Payment Date</div>
+            <div class="col-3">
+              {{
+                dataApp.sedania_payment_date
+                  ? dataApp.sedania_payment_date
+                  : "-"
+              }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">Premium - Year 1</div>
+            <div class="col-3">{{ dataApp.monthly_takaful_premium }}</div>
+            <div class="col-3"></div>
+            <div class="col-3"></div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-3">Certificate No.</div>
+            <div class="col-3">
+              {{ dataApp.fwd_cert_no ? dataApp.fwd_cert_no : "-" }}
+            </div>
+            <div class="col-3">Verified Premium</div>
+            <div class="col-3">
+              {{ dataApp.fwd_premium > 0 ? dataApp.fwd_premium : "-" }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">UW Status</div>
+            <div class="col-3">
+              {{ dataApp.fwd_status ? (dataApp.fwd_status | uppercase) : "-" }}
+            </div>
+            <div class="col-3">Policy Status</div>
+            <div class="col-3">
+              {{
+                dataApp.policy_status
+                  ? (dataApp.policy_status | titlecase)
+                  : "-"
+              }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">UW Status Date</div>
+            <div class="col-3">
+              {{ dataApp.fwd_uw_ts ? dataApp.fwd_uw_ts : "-" }}
+            </div>
+            <div class="col-3">Policy Date</div>
+            <div class="col-3">
+              {{ dataApp.disbursement_date ? dataApp.disbursement_date : "-" }}
+            </div>
+          </div>
+          <p></p>
+          <div class="row">
+            <div class="col-3">Exceptional Flag</div>
+            <div class="col-3">
+              {{ dataApp.exceptional_flag == 1 ? "Y" : "-" }}
+            </div>
+            <div class="col-3">Validation</div>
+            <div class="col-3">
+              {{
+                dataApp.exceptional_status ? dataApp.exceptional_status : "-"
+              }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">Exceptional Date</div>
+            <div class="col-3">
+              {{ dataApp.exceptional_ts ? dataApp.exceptional_ts : "-" }}
+            </div>
+            <div class="col-3">Validation Date</div>
+            <div class="col-3">
+              {{
+                dataApp.exceptional_validation_ts
+                  ? dataApp.exceptional_validation_ts
+                  : "-"
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+  </div>
+  <div
+    class="row"
+    *ngIf="!isGoHalal || (isGoHalal && assidq == true)"
+  >
+    <div class="col-lg-12 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <!--
+          <div
+            *ngIf="eMandatemessage && !error"
+            class="alert alert-success alert-dismissible fade show"
+          >
+            <h4 class="alert-heading">
+              <i class="fas fa-check-circle"></i> Email Sent!
+            </h4>
+            <p>{{ eMandatemessage }}</p>
+            <button type="button" class="close" data-dismiss="alert">
+              &times;
+            </button>
+          </div>
+          <div
+            *ngIf="eMandatemessage && error"
+            class="alert alert-danger alert-dismissible fade show"
+          >
+            <h4 class="alert-heading">
+              <i class="fas fa-times-circle"></i> There's an error!
+            </h4>
+            <p>{{ eMandatemessage }}</p>
+            <button type="button" class="close" data-dismiss="alert">
+              &times;
+            </button>
+          </div>
+        -->
+
+          <div class="row" style="margin: 10px; position: relative">
+            <div class="col-md-9">
+              <i class="fa fa-user fa-lg fa-fw fa-3x"></i>
+              <span class="name-applicant">
+                {{ dataApp.name | uppercase }}
+              </span>
+              <span class="loanamount2">
+                RM {{ dataApp.finamount | number: "" }}
+              </span>
+            </div>
+            <div class="col-md-3">
+              <form #statusForm="ngForm">
+                <select
+                  name="status"
+                  [(ngModel)]="applicant_status"
+                  class="form-control"
+                >
+                  <option *ngFor="let item of buckets" value="{{ item.code }}">
+                    {{ item.name }}
+                  </option>
+                </select>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="changeStatus()"
+                >
+                  <i class="fa fa-chevron-left"></i> Change Status
+                </button>
+              </form>
+            </div>
+            <!--
+            <div class="col-md-3">
+              <span class="eMandateButton" *ngIf="isLoaded">
+                <button
+                  (click)="onReqMandate()"
+                  href="#"
+                  class="export d-none d-md-inline-block btn-lg btn-success shadow-md"
+                >
+                  <i class="fas fa-play text-white-50"></i> Request eMandate
+                </button>
+              </span>
+            </div>
+            -->
+            <!-- Gohalal -->
+            <div class="row">
+              <div class="col applicant-form">
+                <div class="p-10">
+                  <i class="fa fa-fw fa-calendar"></i>
+                  Date Apply : <b> {{ dataApp.apply_date }}</b>
+                </div>
+              </div>
+              <div class="col applicant-form">
+                <div class="p-10">
+                  <i class="fa fa-fw fa-birthday-cake"></i>
+                  Age: <b>{{ dataApp.age_apply }}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fa fa-fw fa-calendar"></i>
+                Date Apply : <b> {{ dataApp.apply_date }}</b>
+              </div>
+            </div>
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fa fa-fw fa-birthday-cake"></i>
+                Age: <b>{{ dataApp.age_apply }}</b>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fa fa-fw fa-id-card"></i>
+                IC Number : <b>{{ dataApp.ic_no }}</b>
+              </div>
+            </div>
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fa fa-fw fa-envelope"></i>
+                Email: <b>{{ dataApp.email | uppercase }}</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fa fa-fw fa-mobile"></i>
+                Phone Number : <b> {{ dataApp.hp }}</b>
+              </div>
+            </div>
+
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fas fa-fw fa-clock"></i>
+                Status:
+                <span class="clr-grey-status"
+                  ><b> {{ AppStatus | titlecase }} </b></span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fa fa-fw fa-map-marker"></i>
+                Postcode : <b> {{ dataApp.postcode }}</b>
+              </div>
+            </div>
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fa fa-fw fa-map-marker"></i>
+                States : <b> {{ dataApp.states }}</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fas fa-fw fa-building"></i>
+                Industy:
+                <span class="clr-grey-status"
+                  ><b> {{ dataApp.industry }} </b></span
+                >
+              </div>
+            </div>
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fa fa-fw fa-map-marker"></i>
+                Sector : <b> {{ mappingStatus(dataApp.sector) }}</b>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fas fa-fw fa-building"></i>
+                Purpose:
+                <span class="clr-grey-status"
+                  ><b> {{ mappingPurpose(dataApp.purpose) }} </b></span
+                >
+              </div>
+            </div>
+            <div class="col applicant-form">
+              <div class="p-10">
+                <i class="fas fa-fw fa-male"></i>
+                Employment Type:
+                <span class="clr-grey-status"
+                  ><b> {{ dataApp.employment_type }} </b></span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 mb-4">
+        <div class="card shadow mb-4">
+          <div class="card-body">
+            <div class="col-md-12" style="padding: 2px 2px">
+              <div class="mg-bt-20">
+                <span class="status-span">Amla Report </span>
+              </div>
+            </div>
+
+            <table
+              class="table table-bordered header-application"
+              id="dataTable"
+              width="100%"
+              cellspacing="0"
+            >
+              <thead>
+                <th
+                  colspan="8"
+                  style="background-color: lightblue; color: black"
+                >
+                  SEARCH RESULT
+                </th>
+                <tr style="background-color: lightblue; color: black">
+                  <th>Profile ID</th>
+                  <th>Risk Category</th>
+                  <th>Match Name</th>
+                  <th>Date of Birth</th>
+                  <th class="text-center">Gender</th>
+                  <th class="text-center">Country</th>
+                  <th>Remarks</th>
+                  <th class="text-center">Match (%)</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="amlaFound; else elseBlock">
+                <tr *ngFor="let report of dataApp.amla_report.profile_list">
+                  <td>{{ report.ProID }}</td>
+                  <td>{{ report.IcoTyps.IcoTyp }}</td>
+                  <td>{{ report.MatNam }}</td>
+                  <!-- <td>{{ report.DOBInfs ? report.DOBInfs.DOBInf[0].Yea + ' ' + report.DOBInfs.DOBInf[1].Yea : '' }}</td> -->
+                  <td *ngIf="report.DOBInfs">
+                    <div *ngFor="let itemDob of report.DOBInfs.DOBInf">
+                      {{ itemDob.Yea }}
+                    </div>
+                  </td>
+                  <td *ngIf="!report.DOBInfs"></td>
+                  <td align="center">{{ report.Gdr }}</td>
+                  <td align="center">{{ report.Cty }}</td>
+                  <td>{{ report.Tit }}</td>
+                  <td align="center">{{ report.MatSco }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <ng-template #elseBlock>
+              <td
+                colspan="8"
+                align="center"
+                style="background-color: bisque; color: black"
+              >
+                NO RECORD FOUND
+              </td>
+            </ng-template>
+            <table
+              class="table table-bordered header-application"
+              id="dataTable"
+              width="100%"
+              cellspacing="0"
+            >
+              <thead>
+                <tr style="background-color: lightblue; color: black">
+                  <th colspan="2" width="30%">Risk Category</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td width="10%">
+                    <b>SAN</b>
+                  </td>
+                  <td>
+                    <b>Sanction List - Person</b>
+                  </td>
+                  <td>
+                    PERSONS WHO ARE SUBJECT TO COMPREHENSIVE OR TARGETED
+                    RESTRICTIVE MEASURE OR CITED IN SANCTIONS LIST FOR VARIOUS
+                    REASON
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>OOL</b>
+                  </td>
+                  <td>
+                    <b>Other Official List - Person</b>
+                  </td>
+                  <td>
+                    PERSONS WHO ARE ASSOCIATED WITH POTENTIALLY HIGH RISK
+                    ACTIVITIES SUCH AS SERIOUS CRIME AND FINANCIAL OR
+                    PROFESSIONAL ENFORCEMENT ACTIONS OR WARNINGS.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>PEP</b>
+                  </td>
+                  <td>
+                    <b>Politically Exposed Person</b>
+                  </td>
+                  <td>
+                    PERSONS WHO ARE WIELDING POLITICAL POWER OR INFLUENCE,
+                    EITHER IN A GOVERNMENT POSITION OR IN AN INTERNATIONAL
+                    ORGANIZATION.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>SI</b>
+                  </td>
+                  <td>
+                    <b>Special Interest - Person</b>
+                  </td>
+                  <td>
+                    PERSONS WHO ARE PROMINENT IN THE NEWS ASSOCIATION WITH
+                    ACCUSED OF ARRESTED FOR OR CONVICTED OR SERIOUS CRIMES.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>SI-LT</b>
+                  </td>
+                  <td>
+                    <b>Special Interest - Person (Lower Threshold)</b>
+                  </td>
+                  <td>
+                    PERSONS WHO ARE REPORTED TO HAVE COMMITTED CRIMES, OR HAS
+                    BEEN FORMALLY DECLARED WANTED AN OFFENCE, OR HAS BEEN
+                    CHARGED WITH AND/ OR ARRESTED ON SUSPICION ACTIVITIES.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>OEL</b>
+                  </td>
+                  <td>
+                    <b>Other Exclusion List - Person</b>
+                  </td>
+                  <td>
+                    EXCLUSIONS FROM PUBLIC SECTOR ACTIVITIES AGAINST PEOPLE
+                    AND/OR ENTITIES OPERATING IN A PARTICULAR JURISDICTION,
+                    SECTOR OR INDUSTRY, USUALLY FOR A SET PERIOD.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>RCA</b>
+                  </td>
+                  <td>
+                    <b>Relative or close associates</b>
+                  </td>
+                  <td>
+                    THE IMMEDIATE FAMILY MEMBERS OF A PERSON AND THEIR CLOSEST
+                    NON-FAMILIAL ASSOCIATES OF PEP.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>BM</b>
+                  </td>
+                  <td>
+                    <b>Board member</b>
+                  </td>
+                  <td>
+                    BOARD MEMBER OF THE STATE-OWNED COMPANIES BY THE
+                    COMPREHENSIVELY SANCTIONED COUNTRIES.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="row"
+    *ngIf="!isGoHalal || (isGoHalal && assidq == true)"
+  >
+    <div class="col-lg-12 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div class="col-md-12" style="padding: 2px 2px">
+            <div class="mg-bt-20">
+              <span class="status-span">CCRIS Report</span>
+            </div>
+          </div>
+
+          <iframe [src]="ccrisURL" width="100%" style="border: 0px"> </iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="row bottom"
+    *ngIf="!isGoHalal || (isGoHalal && assidq == true)"
+  >
+    <div class="col-lg-12 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <div ngbDropdown class="btn-group mg-bt-20 w-100">
+            <button
+              type="button"
+              class="btn text-left btn-success dropdown-toggle"
+              id="dropdownScoring"
+              aria-haspopup="true"
+              aria-expanded="false"
+              ngbDropdownToggle
+            >
+              {{ status }}
+            </button>
+            <div
+              ngbDropdownMenu
+              aria-labelledby="dropdownScoring"
+              class="dropdown-menu w-100 clr-green-theme"
+            >
+              <a
+                *ngIf="!isGoHalal"
+                class="dropdown-item dropdownScoring"
+                ngbDropdownItem
+                (click)="scoringApplied(0)"
+                >Pre-DSR / Scoring</a
+              >
+              <div class="dropdown-divider"></div>
+              <a
+                class="dropdown-item dropdownScoring"
+                ngbDropdownItem
+                (click)="scoringApplied(1)"
+                >Credit Scoring & Report</a
+              >
+              <div class="dropdown-divider"></div>
+              <a
+                *ngIf="!isGoHalal"
+                class="dropdown-item dropdownScoring"
+                ngbDropdownItem
+                (click)="scoringApplied(2)"
+                >Financing</a
+              >
+              <div class="dropdown-divider"></div>
+              <a
+                *ngIf="!isGoHalal"
+                class="dropdown-item dropdownScoring"
+                ngbDropdownItem
+                (click)="scoringApplied(3)"
+                >Documents</a
+              >
+              <!--
+            <div class="dropdown-divider"></div>
+            <a
+              class="dropdown-item dropdownScoring"
+              ngbDropdownItem
+              (click)="scoringApplied(4)"
+              >E-KYC</a
+            >
+            <div class="dropdown-divider"></div>
+            <a
+              class="dropdown-item dropdownScoring"
+              ngbDropdownItem
+              (click)="scoringApplied(5)"
+              >Approval</a
+            >
+            --></div>
+          </div>
+
+          <div *ngIf="status == 'Documents'">
+            <div *ngFor="let item of docs">
+              <h3>{{ item.name }}</h3>
+              <a
+                href="{{ item.url }}"
+                class="btn btn-default button-image"
+                target="_blank"
+                *ngIf="item.mime === 'application/pdf'"
+              >
+                Show PDF Image {{ item.name }}</a
+              >
+              <img
+                class="img-fluid"
+                style="max-width: 400px; max-height: 256px"
+                *ngIf="item.mime === 'image/jpeg'"
+                [src]="item.url"
+              />
+              <img
+                class="img-fluid"
+                style="max-width: 400px; max-height: 256px"
+                *ngIf="item.mime === 'image/png'"
+                [src]="item.url"
+              />
+              <div *ngIf="item.mime === null">Not Submitted</div>
+
+              <p></p>
+            </div>
+          </div>
+          <div *ngIf="status == 'Pre-DSR / Scoring'">
+            <div class="card-body">
+              <div class="col-md-12" style="padding: 2px 2px">
+                <div class="mg-bt-20">
+                  <span class="status-span">Pre-screened DSR </span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="app-circle">{{ dataApp.dsr }} %</div>
+                </div>
+                <div class="col-lg-6">
+                  <table class="table table-com">
+                    <thead>
+                      <tr>
+                        <th scope="col" colspan="2">
+                          <h3>Income ( RM )</h3>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="color-grey-comitment">
+                        <th scope="row">Gross Income</th>
+                        <td class="text-right">
+                          RM {{ dataApp.monthlyincome }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row" colspan="2">
+                          <h3>Comitment (RM)</h3>
+                        </th>
+                      </tr>
+                      <tr class="">
+                        <th scope="row">Personal Financing:</th>
+                        <td class="text-right">
+                          {{ dataApp.personal_loan }}
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <th scope="row">Home Financing</th>
+                        <td class="text-right">{{ dataApp.house_loan }}</td>
+                      </tr>
+                      <tr class="">
+                        <th scope="row">Vehicle Financing</th>
+                        <td class="text-right">
+                          {{ dataApp.vehicle_loan }}
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <th scope="row">Credit Card</th>
+                        <td class="text-right">
+                          {{ dataApp.credit_card_loan }}
+                        </td>
+                      </tr>
+                      <tr class="">
+                        <th scope="row">Others</th>
+                        <td class="text-right">
+                          {{ dataApp.other_loan }}
+                        </td>
+                      </tr>
+                      <tr class="color-yellow-total">
+                        <th scope="row"><h3>Total Comitment:</h3></th>
+                        <td class="text-right">
+                          <b>{{ dataApp.total_commitment }}</b>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="status == 'Financing'">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12">
+                  <h2>Request Financing Details</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">Financing Amount (RM)</div>
+                <div class="col-6">
+                  {{ dataApp.finamount }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">Tenure (month)</div>
+                <div class="col-6">
+                  {{ dataApp.tenure }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">Sector</div>
+                <div class="col-6">
+                  {{ dataApp.sector | titlecase }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">Installment (RM, maximum)</div>
+                <div class="col-6">
+                  {{ dataApp.installment_max }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">Purpose</div>
+                <div class="col-6">
+                  {{ dataApp.purpose | titlecase }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <h2>Applied Facility</h2>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6">Product Name</div>
+                <div class="col-6">
+                  {{ dataApp.product_title }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="status == 'Credit Scoring & Report'">
+            <div class="col-md-12" style="padding: 2px 2px">
+              <div class="mg-bt-20">
+                <span class="status-span">Credit Scoring & Report </span>
+                <a
+                  href="#"
+                  class="export d-none d-sm-inline-block btn-sm btn-primary shadow-sm float-lg-right"
+                  ><i class="fa fa-download fa-sm text-white-50"></i> Export
+                  Excel</a
+                >
+              </div>
+            </div>
+            <div class="row">
+              <!-- Earnings (Monthly) Card Example -->
+              <div class="col-xl-4 col-md-6 mb-4">
+                <b><span>Credit Grade:</span></b>
+                <div
+                  class="card border-left-primary shadow h-100 py-2"
+                  [ngStyle]="{
+                    'background-color': dataApp.credit_grade_color
+                  }"
+                >
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <!-- <div class=" font-weight-bold text-primary text-uppercase mb-1 text-center color-red">Z1</div> -->
+                        <div
+                          class="h5 mb-0 font-weight-bold text-gray-800 text-center"
+                        >
+                          {{ dataApp.credit_grade }}
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fa fa-calendar fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Earnings (Monthly) Card Example -->
+              <div class="col-xl-4 col-md-6 mb-4">
+                <b><span>Credit Score:</span></b>
+                <div
+                  class="card border-left-success shadow h-100 py-2 clr-blue"
+                >
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <!--  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div> -->
+                        <div
+                          class="h5 mb-0 font-weight-bold text-gray-800 text-center"
+                        >
+                          {{ dataApp.credit_score }}
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fa fa-dollar-sign fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-4 col-md-6 mb-4">
+                <span><b>Probability of default:</b></span>
+                <div
+                  class="card border-left-success shadow h-100 py-2 clr-blue"
+                >
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <!--  <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div> -->
+                        <div
+                          class="h5 mb-0 font-weight-bold text-gray-800 text-center"
+                        >
+                          n/a
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fa fa-clipboard fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

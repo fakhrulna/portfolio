@@ -1,0 +1,18 @@
+.hand:hover {
+  cursor: pointer;
+}
+
+.card{
+  background-color: transparent;
+  border: none;
+}
+
+.card-body{
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.btn-primary{
+  background-color: transparent;
+  border-color: transparent;
+}

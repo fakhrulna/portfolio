@@ -1,0 +1,182 @@
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Total {{ statusName }} Application
+        <span class="pull-right-container">
+          <span class="label-breadcrumb">{{ app_count }}</span>
+        </span>
+      </li>
+    </ol>
+  </nav>
+  <nav class="pull-right" style="min-width: 450px">
+    <form #GsForm="ngForm">
+      <div class="row">
+        <div class="col-4">
+          <select
+            name="GsCategorySrc"
+            [(ngModel)]="GsCategorySrc"
+            class="form-control"
+            required
+          >
+            <option value="0" selected="selected">Search By</option>
+            <option *ngFor="let item of GsCategory" value="{{ item.id }}">
+              {{ item.value }}
+            </option>
+          </select>
+        </div>
+        <div class="col-4">
+          <input
+            #GsSearchTextInput
+            required
+            class="form-control"
+            value="{{ GsSearchText }}"
+            [(ngModel)]="GsSearchText"
+            name="GsSearchText"
+          />
+        </div>
+        <div class="col-4">
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="GsForm.invalid || GsCategorySrc == '0'"
+            (click)="GsSearch()"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </nav>
+</div>
+
+<ng-template #notLoaded>
+  <table
+    class="table table-bordered header-application"
+    id="dataTable"
+    width="100%"
+    cellspacing="0"
+  >
+    <thead>
+      <tr class="bg-black font-white">
+        <th>[]</th>
+        <th>App Date</th>
+        <th>App ID</th>
+        <th>Applicant Name</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="alert alert-secondary" role="alert" colspan="6">
+          <p class="text-center">
+            No
+            {{ statusName | titlecase }} Application Data
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>
+
+<div class="row">
+  <div class="col-lg-12 mb-4">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <ng-template #loading> LOADING ... </ng-template>
+        <div *ngIf="isLoaded == true; else loading">
+          <div *ngIf="dataLoaded == true; else notLoaded">
+            <div class="table table-responsive">
+              <div class="alert alert-danger" *ngIf="filterMessage">
+                {{ filterMessage }}
+              </div>
+              <table
+                class="table table-bordered header-application"
+                id="dataTable"
+                width="100%"
+                cellspacing="0"
+              >
+                <thead>
+                  <tr class="bg-black font-white">
+                    <th>App Date</th>
+                    <th>App ID</th>
+                    <th>Applicant Name</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let app of applicant">
+                    <td>
+                      <div>
+                        {{ app.apply_date }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.app_id }}
+                      </div>
+                    </td>
+                    <td>
+                      <img
+                        class="img-profile rounded-circle border-ccc applicant-image"
+                        src="assets/img/profile.png"
+                      />
+                      <b>{{ app.appname | uppercase }}</b>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.app_status | uppercase }}
+                      </div>
+                    </td>
+
+                    <td>
+                      <button type="button" class="btn btn-details">
+                        <a
+                          [routerLink]="[
+                            '/application-detail',
+                            app.detail_id,
+                            app.app_status,
+                            app.app_id,
+                            app.app_code
+                          ]"
+                          >Details</a
+                        >
+
+                        <i class="fa fa-fw fa-angle-right"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- pagination -->
+              <ul class="pagination" *ngIf="paging">
+                <li *ngFor="let item of paginationList">
+                  <span
+                    *ngIf="item === current_page"
+                    style="background-color: #337ab7; color: #fff; border: 1 px"
+                    ><b>{{ item }}</b></span
+                  >
+                  <a *ngIf="item === '..'" style="border: 1 px"
+                    ><b>{{ item }}</b></a
+                  >
+                  <a
+                    (click)="getPage(item)"
+                    *ngIf="item !== current_page && item !== '..'"
+                    style="cursor: pointer"
+                    >{{ item }}</a
+                  >
+                </li>
+              </ul>
+              <!-- end pagination -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

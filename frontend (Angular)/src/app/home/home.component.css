@@ -1,0 +1,38 @@
+.gohalal {
+  margin-bottom: 10px;
+}
+
+.gohalal-box {
+  border-radius: 10px;
+  color: #fff;
+}
+
+.gohalal-next {
+  border-radius: 10px;
+  border: 2px solid #666666;
+  color: #000;
+}
+
+.gohalal-total-applications {
+  background: #bb33aa;
+}
+
+.gohalal-total-amount {
+  background: #8844dd;
+}
+
+.gohalal-total-approved {
+  background: #66cc44;
+}
+
+.gohalal-total-rejected {
+  background: #eeee44;
+}
+
+.gohalal-total-in-progress {
+  background: #ddaa33;
+}
+
+.gohalal-total-to-review {
+  background: #ff0000;
+}

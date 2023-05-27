@@ -1,0 +1,592 @@
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Total {{ statusName }} Application
+        <span class="pull-right-container">
+          <span class="label-breadcrumb">{{ app_count }}</span>
+        </span>
+      </li>
+    </ol>
+  </nav>
+  <nav class="pull-right" style="min-width: 450px">
+    <form #GsForm="ngForm">
+      <div class="row">
+        <div class="col-4">
+          <select
+            name="GsCategorySrc"
+            [(ngModel)]="GsCategorySrc"
+            class="form-control"
+            required
+          >
+            <option value="0" selected="selected">Search By</option>
+            <option *ngFor="let item of GsCategory" value="{{ item.id }}">
+              {{ item.value }}
+            </option>
+          </select>
+        </div>
+        <div class="col-4">
+          <input
+            #GsSearchTextInput
+            required
+            class="form-control"
+            value="{{ GsSearchText }}"
+            [(ngModel)]="GsSearchText"
+            name="GsSearchText"
+          />
+        </div>
+        <div class="col-4">
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="GsForm.invalid || GsCategorySrc == '0'"
+            (click)="GsSearch()"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </nav>
+</div>
+
+<ng-template #notLoaded>
+  <div class="alert alert-success" *ngIf="startDate && endDate">
+    List Of {{ statusName | uppercase }} Application From
+    <span class="badge badge-success">{{ startDate }}</span> To
+    <span class="badge badge-success">{{ endDate }} </span> || Total :
+    <span class="badge badge-primary">{{ total }} Applicants</span>
+  </div>
+  <table
+    class="table table-bordered header-application"
+    id="dataTable"
+    width="100%"
+    cellspacing="0"
+  >
+    <thead>
+      <tr
+        class="bg-black font-white"
+        *ngIf="
+          isGoHalal == false ||
+          (isGoHalal == true && assidq == true)
+        "
+      >
+        <th>Applicant</th>
+        <th>Financing Amount</th>
+        <th>Sector</th>
+        <th>Pre-Screen DSR</th>
+        <th>Credit Score</th>
+        <th></th>
+      </tr>
+      <tr
+        class="bg-black font-white"
+        *ngIf="(isGoHalal == true && assidq == false)"
+      >
+        <th>[]</th>
+        <th>App Date</th>
+        <th>App ID</th>
+        <th>Applicant Name</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="alert alert-secondary" role="alert" colspan="6">
+          <p class="text-center">
+            No
+            {{ statusName | titlecase }} Application Data
+          </p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>
+
+<div class="row">
+  <div class="col-lg-12 mb-4">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <div ngbDropdown class="btn-group mg-bt-20 w-100">
+          <span class="app-dropdown">APPLICATION STATUS :</span>
+          <button
+            type="button"
+            class="btn text-left btn-success dropdown-toggle"
+            id="dropdownBasic1"
+            aria-haspopup="true"
+            aria-expanded="false"
+            ngbDropdownToggle
+          >
+            {{ statusName }}
+          </button>
+
+          <div
+            ngbDropdownMenu
+            aria-labelledby="dropdownBasic1"
+            class="dropdown-menu w-100 clr-green-theme"
+          >
+            <div *ngFor="let item of buckets">
+              <a
+                class="dropdown-item dropdownBasic"
+                ngbDropdownItem
+                (click)="listApplied(item)"
+                >{{ item.name }}</a
+              >
+              <div class="dropdown-divider"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" style="padding: 2px 2px">
+          <div class="row">
+            <div class="col-6" *ngIf="isGoHalal == false">
+              <span class="status-span"
+                >{{ statusName | titlecase }} Application
+              </span>
+            </div>
+
+            <div class="col-3" *ngIf="isGoHalal == false">
+              <form #statusForm="ngForm">
+                <select
+                  name="status"
+                  [(ngModel)]="applicant_status"
+                  class="form-control"
+                >
+                  <option
+                    *ngFor="let item of changeBuckets"
+                    value="{{ item.code }}"
+                  >
+                    {{ item.name }}
+                  </option>
+                </select>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="changeStatus()"
+                >
+                  <i class="fa fa-chevron-left"></i> Change Status
+                </button>
+              </form>
+            </div>
+            <div class="col-12" *ngIf="isGoHalal == true">
+              <form #statusForm="ngForm" class="form-inline">
+                <div class="col-3">
+                  <span style="padding: 5px"><h5>Update Status :</h5></span>
+                </div>
+                <div class="col-3">
+                  <select
+                    name="status"
+                    [(ngModel)]="applicant_status"
+                    class="form-control"
+                    style="width: 100%"
+                    [disabled]="assidq == false"
+                  >
+                    <option
+                      *ngFor="let item of changeBuckets"
+                      value="{{ item.code }}"
+                    >
+                      {{ item.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-2">
+                  <button
+                    style="width: 100%"
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="changeStatus()"
+                    style="width: 100%; min-height: 62px"
+                  >
+                    Change Status
+                  </button>
+                </div>
+                <div class="col-2">
+                  <button
+                    type="button"
+                    (click)="pageRefresh()"
+                    class="btn btn-primary"
+                    style="width: 100%; min-height: 62px"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div class="col-2">
+                  <button
+                    type="button"
+                    (click)="excelPicker.click()"
+                    class="btn btn-primary"
+                    style="width: 100%; min-height: 62px"
+                  >
+                    Upload Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+            <input
+              type="file"
+              #excelPicker
+              (change)="onExcelPicked($event.target.files)"
+            />
+
+            <div class="col-3" *ngIf="isGoHalal == true"></div>
+            <div class="col-3"></div>
+          </div>
+          <div class="mg-bt-20"></div>
+        </div>
+        <div class="col-md-12" style="padding: 2px 12px">
+          <div class="row">
+            <div class="col-8">
+              <div class="mg-bt-20">
+                <div class="btn-group">
+                  <form class="form-inline">
+                    <div class="form-group hidden">
+                      <div class="input-group">
+                        <input
+                          name="datepicker"
+                          class="form-control"
+                          ngbDatepicker
+                          #datepicker="ngbDatepicker"
+                          [autoClose]="'outside'"
+                          (dateSelect)="onDateSelection($event)"
+                          [displayMonths]="2"
+                          [dayTemplate]="t"
+                          outsideDays="hidden"
+                          [startDate]="fromDate"
+                        />
+                        <ng-template #t let-date let-focused="focused">
+                          <span
+                            class="custom-day"
+                            [class.focused]="focused"
+                            [class.range]="isRange(date)"
+                            [class.faded]="isHovered(date) || isInside(date)"
+                            (mouseenter)="hoveredDate = date"
+                            (mouseleave)="hoveredDate = null"
+                          >
+                            {{ date.day }}
+                          </span>
+                        </ng-template>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input
+                          #dpFromDate
+                          class="form-control"
+                          placeholder="yyyy-mm-dd"
+                          name="dpFromDate"
+                          [value]="formatter.format(fromDate)"
+                          (input)="
+                            fromDate = validateInput(fromDate, dpFromDate.value)
+                          "
+                        />
+                        <div class="input-group-append">
+                          <button
+                            class="btn btn-outline-secondary calendar"
+                            (click)="datepicker.toggle()"
+                            type="button"
+                          ></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group ml-2">
+                      <div class="input-group">
+                        <input
+                          #dpToDate
+                          class="form-control"
+                          placeholder="yyyy-mm-dd"
+                          name="dpToDate"
+                          [value]="formatter.format(toDate)"
+                          (input)="
+                            toDate = validateInput(toDate, dpToDate.value)
+                          "
+                        />
+                        <div class="input-group-append">
+                          <button
+                            class="btn btn-outline-secondary calendar"
+                            (click)="datepicker.toggle()"
+                            type="button"
+                          ></button>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="btn-group" style="padding-left: 3px">
+                  <button class="btn btn-dark" (click)="onFilterDateRange()">
+                    Filter
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-2" *ngIf="isGoHalal == true">
+              <button
+                type="button"
+                (click)="disbursementPicker.click()"
+                class="btn btn-primary"
+                style="width: 100%; min-height: 62px"
+              >
+                Upload Disbursement
+              </button>
+              <input
+                type="file"
+                #disbursementPicker
+                (change)="onDisbursementPicked($event.target.files)"
+              />
+            </div>
+            <div class="col-2">
+              <a href="{{ urlExcel }}" target="_blank" (click)="onButtonExcel()"
+                ><button
+                  type="button"
+                  class="btn btn-primary"
+                  style="width: 100%; min-height: 62px"
+                >
+                  Export Excel
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- start alert -->
+        <div class="alert alert-dismissible alert-success" role="alert" *ngFor="let item of success_data | keyvalue">
+          <strong>Success!</strong> {{item.key}} is processed sucessfully.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="alert alert-dismissible alert-danger" role="alert" *ngFor="let item of sfail_data | keyvalue">
+          <strong>Error!</strong> {{item.key}} is not processed due to {{item.value}}.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="alert alert-dismissible alert-danger" role="alert" *ngIf="alert_d == true">
+          <strong>Error!</strong> {{ alert_message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- end alert -->
+
+        <div class="jumbotron" *ngIf="totalDisbursementFailed > 0">
+          <h3 class="display-4">Disbursement Failed!</h3>
+          <hr class="my-4" />
+          <div *ngFor="let item of disbursementFailed">
+            {{ item.app_id }}
+            {{ item.reason }}
+          </div>
+        </div>
+
+        <ng-template #loading> LOADING ... </ng-template>
+        <div *ngIf="isLoaded == true; else loading">
+          <div *ngIf="dataLoaded == true; else notLoaded">
+            <div class="table table-responsive">
+              <div class="alert alert-danger" *ngIf="filterMessage">
+                {{ filterMessage }}
+              </div>
+              <div class="alert alert-success" *ngIf="startDate && endDate">
+                List Of {{ status | uppercase }} Application From
+                <span class="badge badge-success">{{ startDate }}</span> To
+                <span class="badge badge-success">{{ endDate }} </span> || Total
+                :
+                <span class="badge badge-primary">{{ total }} Applicants</span>
+              </div>
+              <table
+                class="table table-bordered header-application"
+                id="dataTable"
+                width="100%"
+                cellspacing="0"
+              >
+                <thead>
+                  <tr
+                    class="bg-black font-white"
+                    *ngIf="
+                      isGoHalal == false ||
+                      (isGoHalal == true && assidq == true)
+                    "
+                  >
+                    <th>[]</th>
+                    <th>Applicant</th>
+                    <th width="25%" class="text-center">Financing Amount</th>
+                    <th>Sector</th>
+                    <th>Pre-Screen DSR</th>
+                    <th>Credit Score</th>
+                    <th></th>
+                  </tr>
+                  <tr
+                    class="bg-black font-white"
+                    *ngIf="(isGoHalal == true && assidq == false)"
+                  >
+                    <th>
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="selectedAll"
+                        (change)="selectAll()"
+                      />
+                    </th>
+                    <th>App Date</th>
+                    <th>App ID</th>
+                    <th>Applicant Name</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+
+                <tbody
+                  *ngIf="
+                    isGoHalal == false ||
+                    (isGoHalal == true && assidq == true)
+                  "
+                >
+                  <tr *ngFor="let app of applicant">
+                    <td>
+                      <input type="checkbox" (click)="checkApp(app)" />
+                    </td>
+                    <td>
+                      <img
+                        class="img-profile rounded-circle border-ccc applicant-image"
+                        src="assets/img/profile.png"
+                      />
+                      <b>{{ app.appname | uppercase }}</b>
+                      &nbsp;
+                      <span
+                        class="badge badge-success"
+                        *ngIf="app.sla_aging < 3"
+                        >{{ app.sla_aging }} days ago</span
+                      >
+                      <span
+                        class="badge badge-warning"
+                        *ngIf="app.sla_aging > 3 && app.sla_aging < 7"
+                        >{{ app.sla_aging }} days ago</span
+                      >
+                      <span class="badge badge-danger" *ngIf="app.sla_aging > 7"
+                        >{{ app.sla_aging }} days ago</span
+                      >
+                    </td>
+                    <td align="center">
+                      <div class="loanamount">
+                        RM {{ app.finamount | number: "" }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="sector">
+                        {{ app.sector | titlecase }}
+                      </div>
+                    </td>
+                    <td>
+                      <div class="prescreen">{{ app.dsr }} %</div>
+                    </td>
+                    <td>
+                      <div
+                        class="creditscore i-creditcore"
+                        [ngStyle]="{
+                          'background-color': app.credit_grade_color,
+                          color: '#000'
+                        }"
+                      >
+                        {{ app.credit_score }}
+                      </div>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-details">
+                        <a
+                          [routerLink]="[
+                            '/application-detail',
+                            app.detail_id,
+                            app.app_status,
+                            app.app_id,
+                            app.app_code
+                          ]"
+                          >Details</a
+                        >
+
+                        <i class="fa fa-fw fa-angle-right"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                <tbody
+                  *ngIf="(isGoHalal == true && assidq == false)"
+                >
+                  <tr *ngFor="let app of applicant">
+                    <td>
+                      <input
+                        type="checkbox"
+                        (click)="checkApp(app)"
+                        [(ngModel)]="app.selected"
+                        (change)="checkIfAllSelected()"
+                      />
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.apply_date }}
+                      </div>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.app_id }}
+                      </div>
+                    </td>
+                    <td>
+                      <img
+                        class="img-profile rounded-circle border-ccc applicant-image"
+                        src="assets/img/profile.png"
+                      />
+                      <b>{{ app.appname | uppercase }}</b>
+                    </td>
+                    <td>
+                      <div>
+                        {{ app.app_status | uppercase }} {{ app.app_status == "ghf_tawarruq_no" && app.confirm_cancel == 1 ? ' (Confirmed)' : '' }}
+
+                      </div>
+                    </td>
+
+                    <td>
+                      <button type="button" class="btn btn-details">
+                        <a
+                          [routerLink]="[
+                            '/application-detail',
+                            app.detail_id,
+                            app.app_status,
+                            app.app_id,
+                            app.app_code
+                          ]"
+                          >Details</a
+                        >
+
+                        <i class="fa fa-fw fa-angle-right"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <!-- pagination -->
+              <ul class="pagination" *ngIf="paging">
+                <li *ngFor="let item of paginationList">
+                  <span
+                    *ngIf="item === current_page"
+                    style="background-color: #337ab7; color: #fff; border: 1 px"
+                    ><b>{{ item }}</b></span
+                  >
+                  <a *ngIf="item === '..'" style="border: 1 px"
+                    ><b>{{ item }}</b></a
+                  >
+                  <a
+                    (click)="getPage(item)"
+                    *ngIf="item !== current_page && item !== '..'"
+                    style="cursor: pointer"
+                    >{{ item }}</a
+                  >
+                </li>
+              </ul>
+              <!-- end pagination -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

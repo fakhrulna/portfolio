@@ -1,0 +1,315 @@
+<div class="row" *ngIf="!isGoHalal">
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-6">
+    <div class="card total-applications shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col-auto">
+            <i
+              class="fa fa-calendar fa-2x text-gray-300"
+              style="color: #fff !important; margin-right: 10px"
+            ></i>
+          </div>
+          <div class="col mr-2">
+            <div class="h5 mb-0 font-weight-bold">{{ total_applicant }}</div>
+            <div class="text-xs font-weight-bold text-uppercase mb-1">
+              Total Applicants
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--
+  Earnings (Monthly) Card Example
+  <div class="col-xl-4 col-md-6 mb-4">
+    <div class="card total-unprocess shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col-auto">
+            <i
+              class="fa fa-dollar-sign fa-2x text-gray-300"
+              style="color: #fff !important; margin-right: 10px"
+            ></i>
+          </div>
+          <div class="col mr-2">
+            <div class="h5 mb-0 font-weight-bold ">0</div>
+            <div class="text-xs font-weight-bold  text-uppercase mb-1">
+              Total Unprocessed Applicants
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  -->
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-6">
+    <div class="card total-overall shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col-auto">
+            <i
+              class="fa fa-clipboard fa-2x text-gray-300"
+              style="color: #fff !important; margin-right: 10px"
+            ></i>
+          </div>
+          <div class="col mr-2">
+            <div class="h5 mb-0 font-weight-bold">
+              {{ total_loan_value | number: "1." }}
+            </div>
+            <div class="text-xs font-weight-bold mb-1">
+              Overall Financing Value
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- GOHALAL -->
+<div class="row" *ngIf="isGoHalal">
+  <div class="col-6 gohalal">
+    <div class="card gohalal-box gohalal-total-applications shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="h5 mb-1 font-weight-bold">Total Applications</div>
+            <div class="h3 mb-0 font-weight-bold">{{ total_applicant }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 gohalal">
+    <div class="card gohalal-box gohalal-total-amount shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="h5 mb-1 font-weight-bold">Total Loan Amount</div>
+            <div class="h3 mb-0 font-weight-bold">
+              {{ total_loan_value | number: "1." }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 gohalal">
+    <div class="card gohalal-box gohalal-total-approved shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="h5 mb-1 font-weight-bold">Total Approved</div>
+            <div class="h3 mb-0 font-weight-bold">
+              {{ ghf_fwd_approved | number: "1." }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 gohalal">
+    <div class="card gohalal-box gohalal-total-rejected shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="h5 mb-1 font-weight-bold">Total Rejected</div>
+            <div class="h3 mb-0 font-weight-bold">
+              {{ ghf_rejected | number: "1." }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 gohalal">
+    <div class="card gohalal-box gohalal-total-in-progress shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="h5 mb-1 font-weight-bold">Total In-Progress</div>
+            <div class="h3 mb-0 font-weight-bold">
+              {{ ghf_tawarruq_in_progress | number: "1." }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 gohalal">
+    <div class="card gohalal-box gohalal-total-to-review shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="h5 mb-1 font-weight-bold">Total To-Review</div>
+            <div class="h3 mb-0 font-weight-bold">
+              {{ ghf_reviewed | number: "1." }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-8"></div>
+  <div class="col-4">
+    <div class="card shadow h-100 py-2 gohalal-next">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <a [routerLink]="['/application']">View Application Details </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END GOHALAL -->
+<!--
+<div class="row">
+  <div class="col-md-12">
+    !-- Area Chart --
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+      </div>
+      <div class="card-body">
+        <div class="chart-area">
+          <canvas id="myAreaChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    !-- Bar Chart --
+  </div>
+</div>
+-->
+<div class="row" *ngIf="!isGoHalal">
+  <div class="col-lg-12">
+    <div class="card shadow mb-4">
+      <div class="card-body">
+        <div class="col-md-12" style="padding: 2px 2px">
+          <div class="mg-bt-20">
+            <span class="status-span">Latest Applications </span>
+            <a [routerLink]="['/application']" class="text-view-all"
+              >View All
+            </a>
+          </div>
+        </div>
+        <div *ngIf="data_loaded" class="table table-responsive">
+          <table
+            class="table table-bordered header-application"
+            id="dataTable"
+            width="100%"
+            cellspacing="0"
+          >
+            <thead>
+              <tr class="bg-black font-white">
+                <th>Applicant</th>
+                <th>Financing Amount</th>
+                <th>Sector</th>
+                <th>Pre-Screen DSR</th>
+                <th>Credit Score</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let app of latest_applicant">
+                <td>
+                  <img
+                    class="img-profile rounded-circle border-ccc applicant-image"
+                    src="assets/img/profile.png"
+                  />
+                  <b>{{ app.appname | uppercase }}</b>
+                </td>
+                <td nowrap>
+                  <div class="loanamount">
+                    RM {{ app.finamount | number: "2." }}
+                  </div>
+                </td>
+                <td nowrap>
+                  <div class="sector">
+                    {{ app.sector | titlecase }}
+                  </div>
+                </td>
+                <td>
+                  <div class="prescreen">{{ app.dsr }} %</div>
+                </td>
+                <td>
+                  <div
+                    class="creditscore i-creditcore"
+                    [ngStyle]="{ 'background-color': app.credit_grade_color }"
+                  >
+                    {{ app.credit_score }}
+                  </div>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-details">
+                    <a
+                      [routerLink]="[
+                        '/application-detail',
+                        app.detail_id,
+                        app.status,
+                        app.app_id,
+                        app.app_code
+                      ]"
+                      >Details</a
+                    >
+
+                    <i class="fa fa-fw fa-angle-right"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <button
+      type="button"
+      [routerLink]="['/application']"
+      class="btn-next-color btn-next"
+      style="float: right"
+    >
+      View All
+    </button>
+    <!--
+    <div class="row">
+      <div class="row circle-color">
+        <div class="circle-status">
+          <div class="excellent-circle">
+            <label class="label-color-status">Excellent</label>
+          </div>
+        </div>
+        <div class="circle-status">
+          <div class="verygood-circle">
+            <label class="label-color-status">Very Good</label>
+          </div>
+        </div>
+        <div class="circle-status">
+          <div class="good-circle">
+            <label class="label-color-status">Good</label>
+          </div>
+        </div>
+        <div class="circle-status">
+          <div class="poor-circle">
+            <label class="label-color-status">Poor</label>
+          </div>
+        </div>
+        <div class="circle-status">
+          <div class="bad-circle">
+            <label class="label-color-status">Bad</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+  </div>
+</div>

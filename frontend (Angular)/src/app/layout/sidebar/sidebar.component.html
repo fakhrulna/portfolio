@@ -1,0 +1,101 @@
+<!-- Sidebar -->
+<div class="navbar-nav {{bckgrnd}} sidebar sidebar-dark accordion">
+  <ul
+    class="navbar-nav {{bckgrnd}} sidebar sidebar-dark accordion"
+    id="accordionSidebar"
+  >
+    <!-- Sidebar - Brand -->
+    <a
+      class="sidebar-brand d-flex align-items-center justify-content-center"
+      href="index.html"
+    >
+      <div class="sidebar-brand-icon">
+        <!-- <i class="fas fa-laugh-wink"></i> -->
+      </div>
+      <div class="sidebar-brand-text mx-3">
+        <!-- <img class="" src="assets/img/gohalal_logo-removebg-preview.png" /> <sup></sup> -->
+        <!-- <img class="" src="assets/img/gohalal_logo.png" *ngIf="isGoHalal"/> <sup></sup> -->
+        <img class="" src="assets/img/logo.png" *ngIf="!isGoHalal"/> <sup></sup>
+      </div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0" /><br>
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item" *ngFor="let item of sideBarMenu">
+      <a
+        class="nav-link"
+        href
+        [routerLink]="[item.menuUrl]"
+        *ngIf="item.showMenu"
+        ><i class="{{ item.menuIcon }}"></i
+        ><span> {{ item.menuTitle }}</span></a
+      >
+    </li>
+    <!-- <li class="nav-item ">
+    <a
+      class="nav-link"
+      href
+      [routerLink]="['/application']"
+      ><i class="fas fa-fw fa-pencil-alt"></i><span> Application</span></a
+    >
+  </li>
+  <li class="nav-item ">
+    <a
+      class="nav-link"
+      href
+      [routerLink]="['/products']"
+      ><i class="fas fa-fw  fa-folder"></i><span> Products</span></a
+    >
+   
+  </li>
+  <li class="nav-item ">
+    <a
+      class="nav-link"
+      href
+      [routerLink]="['/analysis']"
+      ><i class="fas fa-fw  fa-chart-line"></i><span> Analysis</span></a
+    >
+  </li>
+  <li class="nav-item ">
+    <a
+      class="nav-link"
+      href
+      [routerLink]="['/assestment']"
+      ><i class="fas fa-fw fa-file-alt"></i><span> Assessment</span></a
+    >
+  </li>
+  <li class="nav-item ">
+    <a
+      class="nav-link"
+      href
+      [routerLink]="['/setting']"
+      ><i class="fas fa-fw fa-cog"></i><span> Settings</span></a
+    >
+  </li> -->
+  <li class="nav-item ">
+    <a
+      class="nav-link"
+      href
+      [routerLink]="['/change-password']"
+      ><i class="fas fa-fw fa-key"></i><span> Change Password</span></a
+    >
+  </li>
+    <li class="nav-item">
+    <a 
+      class="nav-link hand"
+      (click)="onLogout()"
+    ><i class="fas fa-fw fa-lock"></i><span> Logout</span></a>
+    </li><br>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block" />
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+      <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+  </ul>
+  <!-- End of Sidebar -->
+</div>

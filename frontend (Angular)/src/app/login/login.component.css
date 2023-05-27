@@ -1,0 +1,198 @@
+.forgot-password {
+font-size: 24px;
+font-weight: normal;
+font-style: normal;
+font-stretch: normal;
+line-height: normal;
+letter-spacing: normal;
+text-align: center;
+color: #2bb673;
+text-align: center;
+
+}
+.dont-have-account{
+text-align: center;
+font-size: 24px;
+}
+.modal-header{border-bottom: none !important;}
+.modal-body{border: none !important;}
+
+h2 { width:100%; text-align:center; border-bottom: 1px solid #ced4da; line-height:0.1em; margin:10px 0 20px; }
+h2 span { background:#fff; padding:0 10px; }
+
+.loginBtn {
+  box-sizing: border-box;
+  position: relative;
+  /* width: 13em;  - apply for fixed size */
+  margin: 0.2em;
+  padding: 0 15px 0 46px;
+  border: none;
+  text-align: left;
+  line-height: 34px;
+  white-space: nowrap;
+  border-radius: 0.2em;
+  font-size: 24px;
+  color: #FFF;
+  width: 100% !important;
+  height: 73px;
+  text-align: center;
+}
+.loginBtn:before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 100%;
+}
+.loginBtn:focus {
+outline: none;
+}
+.loginBtn:active {
+box-shadow: inset 0 0 0 32px rgba(0,0,0,0.1);
+}
+
+.loginBtn--facebook {
+background-color: #4C69BA;
+background-image: linear-gradient(#4C69BA, #3B55A0);
+text-shadow: 0 -1px 0 #354C8C;
+}
+.loginBtn--facebook:before {
+background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/icon_facebook.png') 6px 6px no-repeat;
+margin-top: 20px;
+}
+.loginBtn--facebook:hover,
+.loginBtn--facebook:focus {
+background-color: #5B7BD5;
+background-image: linear-gradient(#5B7BD5, #4864B1);
+}
+.check-button{
+height: 76px;
+  width: 100% !important;
+  border-radius: 5px !important;
+  margin-top: 10px;
+  margin-left:0px !important;
+
+}
+input[type="text"]{
+border: 1px solid #ced4da;
+border-radius: 5px;
+}
+input[type="text"]:focus {
+border-color:#55b776 !important;
+font-weight: bold;
+}
+.inputWithIcon {
+position: relative;
+}
+.inputWithIcon i {
+position: absolute;
+left: 0;
+top: 8px;
+padding: 20px 15px;
+color: #aaa;
+transition: 0.3s;
+}
+.fa-fw {
+  width: 1.28571429em;
+  text-align: center;
+}
+.fa-lg {
+  font-size: 20px;
+  line-height: 0.75em;
+  vertical-align: -15%;
+}
+.logout {
+font-size: 18px;
+font-weight: bold;
+font-style: normal;
+font-stretch: normal;
+line-height: normal;
+letter-spacing: normal;
+text-align: center;
+color: #2bb673;
+}
+.axbgg17384940409 {
+font-size: 26px;
+font-weight: bold;
+font-style: normal;
+font-stretch: normal;
+line-height: normal;
+letter-spacing: normal;
+text-align: right;
+color: #343a40;
+}
+.Application {
+font-size: 26px;
+font-weight: normal;
+font-style: normal;
+font-stretch: normal;
+line-height: normal;
+letter-spacing: normal;
+color: #868e96;
+}
+.pd-20{
+padding:20px;
+
+}
+.F {
+width: 35px;
+height: 39px;
+font-size: 35px;
+
+}
+.mt-10{
+margin-top: 20px;
+}
+.btn {
+background-color: #55b776;
+margin: 5px;
+width: 75px;
+color: white;
+}
+.btn:hover {
+color: white;
+}
+.btn:focus {
+color: white;
+}
+.btn-container {
+display: flex;
+justify-content: center;
+width: 100%;
+position: absolute;
+bottom: 0;
+}
+.found-brder{
+border-radius: 5px;
+border: 1px solid #ced4da;
+min-height: 150px;
+margin: 10px;
+padding: 10px;
+background-color: #f8f9fa;
+padding-top:30px;
+padding-bottom: 30px;
+}
+.pl-3{
+padding-left: 3px !important;
+}
+.Rectangle-Copy {
+width: 795px;
+min-height: 215px !important;
+border-radius: 5px;
+border: solid 1px #ced4da;
+background-color: #f8f9fa;
+}
+.Submitted-on-8-July {
+width: 297px;
+height: 35px;
+font-family: NunitoSans;
+font-size: 26px;
+font-weight: normal;
+font-style: normal;
+font-stretch: normal;
+line-height: normal;
+letter-spacing: normal;
+color: #343a40;
+}

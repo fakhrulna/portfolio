@@ -1,0 +1,94 @@
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/application-fwd/exceptional']">FWD Reports</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Name Validation
+      </li>
+    </ol>
+  </nav>
+</div>
+
+<ng-template #Loading> Loading </ng-template>
+
+<div *ngIf="isLoaded; else Loading">
+  <form class="form-inline">
+    <div class="row">
+      <div class="col-lg-12 mb-4">
+        <h3 style="margin: auto; text-align: center; color: blue">
+          Name Validation
+        </h3>
+        <div class="card shadow mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-4">Old Name</div>
+              <div class="col-8">{{ dataApp.name }}</div>
+              <div class="col-4">Old IC No</div>
+              <div class="col-8">{{ icNoShow(dataApp.ic_no) }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="card shadow mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-4">New Name</div>
+              <div class="col-8">
+                <input
+                  *ngIf="dataApp.exceptional_status == 'pending'"
+                  #newName
+                  class="form-control"
+                  value="{{ dataApp.name }}"
+                  name="newName"
+                  (change)="setNewName($event.target.value)"
+                />
+                <span *ngIf="dataApp.exceptional_status !== 'pending'">{{
+                  dataApp.validated_name
+                }}</span>
+              </div>
+              <div class="col-4">New IC No</div>
+              <div class="col-8">
+                <input
+                  *ngIf="dataApp.exceptional_status == 'pending'"
+                  #newIcNo
+                  class="form-control"
+                  value="{{ icNoShow(dataApp.ic_no) }}"
+                  name="newIcNo"
+                  (change)="setNewIcNo($event.target.value)"
+                />
+                <span *ngIf="dataApp.exceptional_status !== 'pending'">{{
+                  dataApp.validated_ic
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card shadow mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12">
+                Customer name provided has been verified against customer’s
+                personal identification card. All the information provided are
+                accurate and valid.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button
+            *ngIf="dataApp.exceptional_status == 'pending'"
+            (click)="saveData()"
+          >
+            Submit Request
+          </button>
+          <button (click)="back()">Cancel</button>
+        </div>
+      </div>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+    </div>
+  </form>
+</div>

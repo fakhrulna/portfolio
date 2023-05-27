@@ -1,0 +1,33 @@
+.btn-group-lg > .btn,
+.btn-lg {
+  padding: 0.4rem 0.4rem;
+  font-size: 1.25rem;
+  line-height: 2;
+  border-radius: 0.3rem;
+}
+
+.eMandateButton {
+  /* margin: 10px; */
+  cursor: pointer;
+}
+
+.dropdownScoring {
+  cursor: pointer;
+}
+
+.name-applicant {
+  font-size: 1.5rem;
+}
+
+.loanamount2 {
+  font-size: 1rem;
+}
+
+.bottom {
+  margin-bottom: 30px;
+}
+
+.button-image {
+  background-color: cornflowerblue;
+  color: black;
+}

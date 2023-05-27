@@ -1,0 +1,87 @@
+<div class="d-sm-flex align-items-center justify-content-between ">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+                <li class="breadcrumb-item"><a [routerLink]="['/products']">Products</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Product Detail</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 products">
+        <div class="widget">
+            <!-- <div class="widget-title">
+                <h2>Add Product</h2>
+            </div> -->
+
+            <div class="product-list">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="product-content clearfix">
+                        <div class="product-logo">
+                            <img
+                            src="{{ productDetail.bankimage }}"
+                            style="height: 40px;"
+                            />
+                        </div>
+                        <div class="product-details">
+                            <h2>
+                            {{ productDetail.productname }}
+                            </h2>
+                            <p>Date created: {{ productDetail.addedts }}</p>
+                            <p>
+                            Financing Amount (RM): 
+                            <span
+                                >{{ productDetail.minfinancingamount }}  -
+                                {{ productDetail.maxfinancingamount }}</span
+                            >
+                            </p>
+                            <p>
+                            Profit Rate (%):
+                            <span>{{ productDetail.profitrate }}</span>
+                            </p>
+                            <p>
+                            Sector: <span>{{ productDetail.sector }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                    <div class="product-content clearfix">
+                        <div class="product-details float-left">
+                            <h2 class="sm-none">&nbsp;</h2>
+                            <p>
+                            Publish :
+                            <span
+                                class="label label-success"
+                                >{{ productDetail.publish }}</span
+                            >
+                            </p>
+                            <p>
+                            Tenure (month):
+                            <span
+                                >{{ productDetail.mintenure }} - {{ productDetail.maxtenure }}</span
+                            >
+                            </p>
+                            <p>
+                            Minimum Monthly Income (RM):
+                            <span>{{ productDetail.monthlyincome }}</span>
+                            </p>
+                        </div>
+                        <div class="app-btn">
+                            <a href ng-click="setSelection($index)"
+                            ><i class="icon-edit-alt"></i
+                            ></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  
